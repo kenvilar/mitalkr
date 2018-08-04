@@ -13884,6 +13884,7 @@ module.exports = __webpack_require__(43);
 __webpack_require__(13);
 
 window.Vue = __webpack_require__(36);
+Vue.use(__webpack_require__(55));
 
 /**
  * Next, we will create a fresh Vue application instance and attach it to
@@ -47558,7 +47559,7 @@ exports = module.exports = __webpack_require__(45)(false);
 
 
 // module
-exports.push([module.i, "\n.chat-box[data-v-283a73ed] {\n    height: 400px;\n}\n", ""]);
+exports.push([module.i, "\n.chat-box[data-v-283a73ed] {\n    height: 400px;\n}\n.card-body[data-v-283a73ed] {\n    overflow-y: scroll;\n}\n", ""]);
 
 // exports
 
@@ -47845,9 +47846,58 @@ Object.defineProperty(__webpack_exports__, "__esModule", { value: true });
 //
 //
 //
+//
+//
 
 /* harmony default export */ __webpack_exports__["default"] = ({
-    name: "message-component"
+    data: function data() {
+        return {
+            messages: []
+        };
+    },
+
+    name: "message-component",
+    created: function created() {
+        this.messages.push({
+            body: 'haalooo'
+        }, {
+            body: 'hi, how are you?'
+        }, {
+            body: 'hi, how are you?'
+        }, {
+            body: 'hi, how are you?'
+        }, {
+            body: 'hi, how are you?'
+        }, {
+            body: 'hi, how are you?'
+        }, {
+            body: 'hi, how are you?'
+        }, {
+            body: 'hi, how are you?'
+        }, {
+            body: 'hi, how are you?'
+        }, {
+            body: 'hi, how are you?'
+        }, {
+            body: 'hi, how are you?'
+        }, {
+            body: 'hi, how are you?'
+        }, {
+            body: 'hi, how are you?'
+        }, {
+            body: 'hi, how are you?'
+        }, {
+            body: 'hi, how are you?'
+        }, {
+            body: 'Bottom'
+        });
+    },
+
+    methods: {
+        send: function send() {
+            console.log('yeah...');
+        }
+    }
 });
 
 /***/ }),
@@ -47858,28 +47908,48 @@ var render = function() {
   var _vm = this
   var _h = _vm.$createElement
   var _c = _vm._self._c || _h
-  return _vm._m(0)
+  return _c("div", { staticClass: "card card-default chat-box" }, [
+    _c("div", { staticClass: "card-header" }, [_vm._v("Chats")]),
+    _vm._v(" "),
+    _c(
+      "div",
+      {
+        directives: [{ name: "chat-scroll", rawName: "v-chat-scroll" }],
+        staticClass: "card-body"
+      },
+      _vm._l(_vm.messages, function(message, index) {
+        return _c("p", { key: index, staticClass: "card-text" }, [
+          _vm._v("\n            " + _vm._s(message.body) + "\n        ")
+        ])
+      })
+    ),
+    _vm._v(" "),
+    _c(
+      "form",
+      {
+        staticClass: "card-footer",
+        attrs: { action: "" },
+        on: {
+          submit: function($event) {
+            $event.preventDefault()
+            return _vm.send($event)
+          }
+        }
+      },
+      [_vm._m(0)]
+    )
+  ])
 }
 var staticRenderFns = [
   function() {
     var _vm = this
     var _h = _vm.$createElement
     var _c = _vm._self._c || _h
-    return _c("div", { staticClass: "card card-default chat-box" }, [
-      _c("div", { staticClass: "card-header" }, [_vm._v("Chats")]),
-      _vm._v(" "),
-      _c("div", { staticClass: "card-body" }, [
-        _vm._v("\n        Hey, how are you?\n    ")
-      ]),
-      _vm._v(" "),
-      _c("form", { staticClass: "card-footer", attrs: { action: "" } }, [
-        _c("div", { staticClass: "form-group" }, [
-          _c("input", {
-            staticClass: "form-control",
-            attrs: { type: "text", placeholder: "Write your message here..." }
-          })
-        ])
-      ])
+    return _c("div", { staticClass: "form-group" }, [
+      _c("input", {
+        staticClass: "form-control",
+        attrs: { type: "text", placeholder: "Write your message here..." }
+      })
     ])
   }
 ]
@@ -47891,6 +47961,70 @@ if (false) {
     require("vue-hot-reload-api")      .rerender("data-v-283a73ed", module.exports)
   }
 }
+
+/***/ }),
+/* 55 */
+/***/ (function(module, exports, __webpack_require__) {
+
+(function (global, factory) {
+	 true ? module.exports = factory() :
+	typeof define === 'function' && define.amd ? define(factory) :
+	(global['vue-chat-scroll'] = factory());
+}(this, (function () { 'use strict';
+
+/**
+* @name VueJS vChatScroll (vue-chat-scroll)
+* @description Monitors an element and scrolls to the bottom if a new child is added
+* @author Theodore Messinezis <theo@theomessin.com>
+* @file v-chat-scroll  directive definition
+*/
+
+var scrollToBottom = function scrollToBottom(el, smooth) {
+  el.scroll({
+    top: el.scrollHeight,
+    behavior: smooth ? 'smooth' : 'instant'
+  });
+};
+
+var vChatScroll = {
+  bind: function bind(el, binding) {
+    var scrolled = false;
+
+    el.addEventListener('scroll', function (e) {
+      scrolled = el.scrollTop + el.clientHeight + 1 < el.scrollHeight;
+    });
+
+    new MutationObserver(function (e) {
+      var config = binding.value || {};
+      var pause = config.always === false && scrolled;
+      if (pause || e[e.length - 1].addedNodes.length != 1) return;
+      scrollToBottom(el, config.smooth);
+    }).observe(el, { childList: true });
+  },
+  inserted: scrollToBottom
+};
+
+/**
+* @name VueJS vChatScroll (vue-chat-scroll)
+* @description Monitors an element and scrolls to the bottom if a new child is added
+* @author Theodore Messinezis <theo@theomessin.com>
+* @file vue-chat-scroll plugin definition
+*/
+
+var VueChatScroll = {
+  install: function install(Vue, options) {
+    Vue.directive('chat-scroll', vChatScroll);
+  }
+};
+
+if (typeof window !== 'undefined' && window.Vue) {
+  window.Vue.use(VueChatScroll);
+}
+
+return VueChatScroll;
+
+})));
+
 
 /***/ })
 /******/ ]);
