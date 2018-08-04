@@ -6,9 +6,12 @@
                     <div class="card-header">Private Chat App</div>
 
                     <ul class="list-group">
-                        <li class="list-group-item">Vilar Ken</li>
-                        <li class="list-group-item">Ken Vilar</li>
-                        <li class="list-group-item">Bill Gates</li>
+                        <li class="list-group-item"
+                            v-for="user in users"
+                            :key="user.id"
+                        >
+                            {{ user.name }}
+                        </li>
                     </ul>
                 </div>
             </div>
@@ -24,17 +27,23 @@
         data() {
             return {
                 open: true,
+                users: [],
             };
         },
         created() {
-            this.$on('close', () =>  this.close());
+            this.$on('close', () => this.close());
+
         },
         mounted() {
-            console.log('Component mounted.')
+            console.log('Component mounted.');
+            this.getFriends();
         },
         methods: {
             close() {
                 this.open = false;
+            },
+            getFriends() {
+                axios.post('/getUsers').then((res) => this.users = res.data);
             },
         }
     }

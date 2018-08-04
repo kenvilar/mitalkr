@@ -47334,11 +47334,15 @@ Object.defineProperty(__webpack_exports__, "__esModule", { value: true });
 //
 //
 //
+//
+//
+//
 
 /* harmony default export */ __webpack_exports__["default"] = ({
     data: function data() {
         return {
-            open: true
+            open: true,
+            users: []
         };
     },
     created: function created() {
@@ -47350,11 +47354,19 @@ Object.defineProperty(__webpack_exports__, "__esModule", { value: true });
     },
     mounted: function mounted() {
         console.log('Component mounted.');
+        this.getFriends();
     },
 
     methods: {
         close: function close() {
             this.open = false;
+        },
+        getFriends: function getFriends() {
+            var _this2 = this;
+
+            axios.post('/getUsers').then(function (res) {
+                return _this2.users = res.data;
+            });
         }
     }
 });
@@ -47369,7 +47381,31 @@ var render = function() {
   var _c = _vm._self._c || _h
   return _c("div", { staticClass: "container" }, [
     _c("div", { staticClass: "row justify-content-center" }, [
-      _vm._m(0),
+      _c("div", { staticClass: "col-md-3" }, [
+        _c("div", { staticClass: "card card-default" }, [
+          _c("div", { staticClass: "card-header" }, [
+            _vm._v("Private Chat App")
+          ]),
+          _vm._v(" "),
+          _c(
+            "ul",
+            { staticClass: "list-group" },
+            _vm._l(_vm.users, function(user) {
+              return _c(
+                "li",
+                { key: user.id, staticClass: "list-group-item" },
+                [
+                  _vm._v(
+                    "\n                        " +
+                      _vm._s(user.name) +
+                      "\n                    "
+                  )
+                ]
+              )
+            })
+          )
+        ])
+      ]),
       _vm._v(" "),
       _c(
         "div",
@@ -47384,26 +47420,7 @@ var render = function() {
     ])
   ])
 }
-var staticRenderFns = [
-  function() {
-    var _vm = this
-    var _h = _vm.$createElement
-    var _c = _vm._self._c || _h
-    return _c("div", { staticClass: "col-md-3" }, [
-      _c("div", { staticClass: "card card-default" }, [
-        _c("div", { staticClass: "card-header" }, [_vm._v("Private Chat App")]),
-        _vm._v(" "),
-        _c("ul", { staticClass: "list-group" }, [
-          _c("li", { staticClass: "list-group-item" }, [_vm._v("Vilar Ken")]),
-          _vm._v(" "),
-          _c("li", { staticClass: "list-group-item" }, [_vm._v("Ken Vilar")]),
-          _vm._v(" "),
-          _c("li", { staticClass: "list-group-item" }, [_vm._v("Bill Gates")])
-        ])
-      ])
-    ])
-  }
-]
+var staticRenderFns = []
 render._withStripped = true
 module.exports = { render: render, staticRenderFns: staticRenderFns }
 if (false) {
