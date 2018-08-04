@@ -47884,12 +47884,26 @@ Object.defineProperty(__webpack_exports__, "__esModule", { value: true });
 //
 //
 //
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
 
 /* harmony default export */ __webpack_exports__["default"] = ({
     data: function data() {
         return {
             messages: [],
-            open: true
+            open: true,
+            block: false
         };
     },
 
@@ -47936,6 +47950,16 @@ Object.defineProperty(__webpack_exports__, "__esModule", { value: true });
         },
         close: function close() {
             this.$emit('close');
+        },
+        blockSession: function blockSession() {
+            console.log('block');
+            this.block = true;
+        },
+        unblockSession: function unblockSession() {
+            this.block = false;
+        },
+        clearChat: function clearChat() {
+            console.log('clear chat');
         }
     }
 });
@@ -47950,7 +47974,11 @@ var render = function() {
   var _c = _vm._self._c || _h
   return _c("div", { staticClass: "card card-default chat-box" }, [
     _c("div", { staticClass: "card-header" }, [
-      _vm._v("\n        Chats\n        "),
+      _c("strong", { class: { "text-danger": _vm.block } }, [
+        _vm._v("\n            User Name\n            "),
+        _vm.block ? _c("span", [_vm._v("(Blocked)")]) : _vm._e()
+      ]),
+      _vm._v(" "),
       _c(
         "a",
         {
@@ -47968,7 +47996,65 @@ var render = function() {
             attrs: { "aria-hidden": "true" }
           })
         ]
-      )
+      ),
+      _vm._v(" "),
+      _c("div", { staticClass: "dropdown float-right mr-4" }, [
+        _vm._m(0),
+        _vm._v(" "),
+        _c(
+          "div",
+          {
+            staticClass: "dropdown-menu",
+            attrs: { "aria-labelledby": "dropdownMenuButton" }
+          },
+          [
+            !_vm.block
+              ? _c(
+                  "a",
+                  {
+                    staticClass: "dropdown-item",
+                    attrs: { href: "" },
+                    on: {
+                      click: function($event) {
+                        $event.preventDefault()
+                        return _vm.blockSession($event)
+                      }
+                    }
+                  },
+                  [_vm._v("Block")]
+                )
+              : _c(
+                  "a",
+                  {
+                    staticClass: "dropdown-item",
+                    attrs: { href: "" },
+                    on: {
+                      click: function($event) {
+                        $event.preventDefault()
+                        return _vm.unblockSession($event)
+                      }
+                    }
+                  },
+                  [_vm._v("Unblock")]
+                ),
+            _vm._v(" "),
+            _c(
+              "a",
+              {
+                staticClass: "dropdown-item",
+                attrs: { href: "" },
+                on: {
+                  click: function($event) {
+                    $event.preventDefault()
+                    return _vm.clearChat($event)
+                  }
+                }
+              },
+              [_vm._v("Clear Chat")]
+            )
+          ]
+        )
+      ])
     ]),
     _vm._v(" "),
     _c(
@@ -47996,7 +48082,18 @@ var render = function() {
           }
         }
       },
-      [_vm._m(0)]
+      [
+        _c("div", { staticClass: "form-group" }, [
+          _c("input", {
+            staticClass: "form-control",
+            attrs: {
+              type: "text",
+              placeholder: "Write your message here...",
+              disabled: _vm.block
+            }
+          })
+        ])
+      ]
     )
   ])
 }
@@ -48005,12 +48102,23 @@ var staticRenderFns = [
     var _vm = this
     var _h = _vm.$createElement
     var _c = _vm._self._c || _h
-    return _c("div", { staticClass: "form-group" }, [
-      _c("input", {
-        staticClass: "form-control",
-        attrs: { type: "text", placeholder: "Write your message here..." }
-      })
-    ])
+    return _c(
+      "a",
+      {
+        attrs: {
+          href: "",
+          "data-toggle": "dropdown",
+          "aria-haspopup": "true",
+          "aria-expanded": "false"
+        }
+      },
+      [
+        _c("i", {
+          staticClass: "fa fa-ellipsis-v",
+          attrs: { "aria-hidden": "true" }
+        })
+      ]
+    )
   }
 ]
 render._withStripped = true
