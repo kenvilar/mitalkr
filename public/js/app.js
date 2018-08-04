@@ -47332,10 +47332,30 @@ Object.defineProperty(__webpack_exports__, "__esModule", { value: true });
 //
 //
 //
+//
+//
 
 /* harmony default export */ __webpack_exports__["default"] = ({
+    data: function data() {
+        return {
+            open: true
+        };
+    },
+    created: function created() {
+        var _this = this;
+
+        this.$on('close', function () {
+            return _this.close();
+        });
+    },
     mounted: function mounted() {
         console.log('Component mounted.');
+    },
+
+    methods: {
+        close: function close() {
+            this.open = false;
+        }
     }
 });
 
@@ -47351,7 +47371,16 @@ var render = function() {
     _c("div", { staticClass: "row justify-content-center" }, [
       _vm._m(0),
       _vm._v(" "),
-      _c("div", { staticClass: "col-md-9" }, [_c("message-component")], 1)
+      _c(
+        "div",
+        { staticClass: "col-md-9" },
+        [
+          _vm.open
+            ? _c("message-component", { on: { close: _vm.close } })
+            : _vm._e()
+        ],
+        1
+      )
     ])
   ])
 }
@@ -47365,9 +47394,11 @@ var staticRenderFns = [
         _c("div", { staticClass: "card-header" }, [_vm._v("Private Chat App")]),
         _vm._v(" "),
         _c("ul", { staticClass: "list-group" }, [
-          _c("li", { staticClass: "list-group-item" }, [
-            _vm._v("Cras justo odio")
-          ])
+          _c("li", { staticClass: "list-group-item" }, [_vm._v("Vilar Ken")]),
+          _vm._v(" "),
+          _c("li", { staticClass: "list-group-item" }, [_vm._v("Ken Vilar")]),
+          _vm._v(" "),
+          _c("li", { staticClass: "list-group-item" }, [_vm._v("Bill Gates")])
         ])
       ])
     ])
@@ -47848,11 +47879,17 @@ Object.defineProperty(__webpack_exports__, "__esModule", { value: true });
 //
 //
 //
+//
+//
+//
+//
+//
 
 /* harmony default export */ __webpack_exports__["default"] = ({
     data: function data() {
         return {
-            messages: []
+            messages: [],
+            open: true
         };
     },
 
@@ -47896,6 +47933,9 @@ Object.defineProperty(__webpack_exports__, "__esModule", { value: true });
     methods: {
         send: function send() {
             console.log('yeah...');
+        },
+        close: function close() {
+            this.$emit('close');
         }
     }
 });
@@ -47909,7 +47949,27 @@ var render = function() {
   var _h = _vm.$createElement
   var _c = _vm._self._c || _h
   return _c("div", { staticClass: "card card-default chat-box" }, [
-    _c("div", { staticClass: "card-header" }, [_vm._v("Chats")]),
+    _c("div", { staticClass: "card-header" }, [
+      _vm._v("\n        Chats\n        "),
+      _c(
+        "a",
+        {
+          attrs: { href: "" },
+          on: {
+            click: function($event) {
+              $event.preventDefault()
+              return _vm.close($event)
+            }
+          }
+        },
+        [
+          _c("i", {
+            staticClass: "fa fa-times float-right",
+            attrs: { "aria-hidden": "true" }
+          })
+        ]
+      )
+    ]),
     _vm._v(" "),
     _c(
       "div",

@@ -1,6 +1,11 @@
 <template>
     <div class="card card-default chat-box">
-        <div class="card-header">Chats</div>
+        <div class="card-header">
+            Chats
+            <a href="" @click.prevent="close">
+                <i class="fa fa-times float-right" aria-hidden="true"></i>
+            </a>
+        </div>
 
         <div class="card-body" v-chat-scroll>
             <p class="card-text" v-for="(message, index) in messages" :key="index">
@@ -19,7 +24,8 @@
     export default {
         data() {
             return {
-                messages: []
+                messages: [],
+                open: true,
             };
         },
         name: "message-component",
@@ -78,7 +84,10 @@
         methods: {
             send() {
                 console.log('yeah...');
-            }
+            },
+            close() {
+                this.$emit('close');
+            },
         },
     }
 </script>
