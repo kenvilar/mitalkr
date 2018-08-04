@@ -11,7 +11,7 @@
                 </div>
             </div>
             <div class="col-md-9">
-
+                <message-component></message-component>
             </div>
         </div>
     </div>
