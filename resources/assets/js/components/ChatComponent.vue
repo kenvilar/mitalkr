@@ -56,10 +56,13 @@
             getUsers() {
                 axios.get('/getUsers').then((res) => this.users = res.data.data);
             },
-            createSession(user) {
+            createSession: function (user) {
                 axios.post('/sessions/create', {
                     user_id: user.identifier,
-                }).then(res => console.log(res.data));
+                }).then(res => {
+                    user.session = res.data.data;
+                    user.session.open = true;
+                });
             },
             openChat(user) {
                 if (user.session) {

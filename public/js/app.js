@@ -47380,11 +47380,13 @@ Object.defineProperty(__webpack_exports__, "__esModule", { value: true });
                 return _this2.users = res.data.data;
             });
         },
+
         createSession: function createSession(user) {
             axios.post('/sessions/create', {
                 user_id: user.identifier
             }).then(function (res) {
-                return console.log(res.data);
+                user.session = res.data.data;
+                user.session.open = true;
             });
         },
         openChat: function openChat(user) {

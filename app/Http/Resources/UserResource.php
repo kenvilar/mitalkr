@@ -31,6 +31,6 @@ class UserResource extends JsonResource
             ->whereIn('user2_id', [auth()->user()->id, $id])
             ->first();
         
-        return $session;
+        return new SessionResource($session);
     }
 }
