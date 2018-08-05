@@ -29,6 +29,6 @@ class HomeController extends Controller
     
     public function getUsers()
     {
-        return UserResource::collection(User::all());
+        return UserResource::collection(User::query()->where('id', '!=', auth()->user()->id)->get());
     }
 }
