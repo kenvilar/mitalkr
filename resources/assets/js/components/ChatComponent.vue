@@ -8,7 +8,7 @@
                     <ul class="list-group">
                         <a href=""
                            v-for="user in users"
-                           :key="user.id"
+                           :key="user.identifier"
                            @click.prevent="openChat(user)"
                         >
                             <li class="list-group-item">
@@ -21,7 +21,8 @@
             <div class="col-md-9">
                 <span
                         v-for="user in users"
-                        :key="user.id"
+                        :key="user.identifier"
+                        v-if="user.session"
                 >
                     <message-component
                             v-if="user.session.open"
@@ -55,12 +56,21 @@
             getUsers() {
                 axios.get('/getUsers').then((res) => this.users = res.data.data);
             },
+            createSession(user) {
+                axios.post('/sessions/create', {
+                    user_id: user.identifier,
+                }).then(res => console.log(res.data));
+            },
             openChat(user) {
-                this.users.forEach(user => {
-                    user.session.open = false;
-                });
-                user.session.open = true;
-            }
+                if (user.session) {
+                    this.users.forEach(user => {
+                        user.session.open = false;
+                    });
+                    user.session.open = true;
+                } else {
+                    this.createSession(user);
+                }
+            },
         }
     }
 </script>

@@ -20,3 +20,5 @@ Auth::routes();
 Route::get('/home', 'HomeController@index')->name('home');
 
 Route::get('/getUsers', 'HomeController@getUsers');
+
+Route::post('/sessions/create', 'SessionController@create');

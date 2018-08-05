@@ -47349,6 +47349,7 @@ Object.defineProperty(__webpack_exports__, "__esModule", { value: true });
 //
 //
 //
+//
 
 /* harmony default export */ __webpack_exports__["default"] = ({
     data: function data() {
@@ -47379,11 +47380,22 @@ Object.defineProperty(__webpack_exports__, "__esModule", { value: true });
                 return _this2.users = res.data.data;
             });
         },
-        openChat: function openChat(user) {
-            this.users.forEach(function (user) {
-                user.session.open = false;
+        createSession: function createSession(user) {
+            axios.post('/sessions/create', {
+                user_id: user.identifier
+            }).then(function (res) {
+                return console.log(res.data);
             });
-            user.session.open = true;
+        },
+        openChat: function openChat(user) {
+            if (user.session) {
+                this.users.forEach(function (user) {
+                    user.session.open = false;
+                });
+                user.session.open = true;
+            } else {
+                this.createSession(user);
+            }
         }
     }
 });
@@ -47411,7 +47423,7 @@ var render = function() {
               return _c(
                 "a",
                 {
-                  key: user.id,
+                  key: user.identifier,
                   attrs: { href: "" },
                   on: {
                     click: function($event) {
@@ -47439,23 +47451,25 @@ var render = function() {
         "div",
         { staticClass: "col-md-9" },
         _vm._l(_vm.users, function(user) {
-          return _c(
-            "span",
-            { key: user.id },
-            [
-              user.session.open
-                ? _c("message-component", {
-                    attrs: { user: user },
-                    on: {
-                      close: function($event) {
-                        _vm.close(user)
-                      }
-                    }
-                  })
-                : _vm._e()
-            ],
-            1
-          )
+          return user.session
+            ? _c(
+                "span",
+                { key: user.identifier },
+                [
+                  user.session.open
+                    ? _c("message-component", {
+                        attrs: { user: user },
+                        on: {
+                          close: function($event) {
+                            _vm.close(user)
+                          }
+                        }
+                      })
+                    : _vm._e()
+                ],
+                1
+              )
+            : _vm._e()
         })
       )
     ])
