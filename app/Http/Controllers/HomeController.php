@@ -2,8 +2,8 @@
 
 namespace App\Http\Controllers;
 
+use App\Http\Resources\UserResource;
 use App\User;
-use Illuminate\Http\Request;
 
 class HomeController extends Controller
 {
@@ -29,6 +29,6 @@ class HomeController extends Controller
     
     public function getUsers()
     {
-        return User::all();
+        return UserResource::collection(User::all());
     }
 }

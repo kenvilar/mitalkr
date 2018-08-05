@@ -47337,11 +47337,22 @@ Object.defineProperty(__webpack_exports__, "__esModule", { value: true });
 //
 //
 //
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
 
 /* harmony default export */ __webpack_exports__["default"] = ({
     data: function data() {
         return {
-            open: true,
             users: []
         };
     },
@@ -47351,22 +47362,28 @@ Object.defineProperty(__webpack_exports__, "__esModule", { value: true });
         this.$on('close', function () {
             return _this.close();
         });
+        this.getUsers();
     },
     mounted: function mounted() {
         console.log('Component mounted.');
-        this.getFriends();
     },
 
     methods: {
-        close: function close() {
-            this.open = false;
+        close: function close(user) {
+            user.session.open = false;
         },
-        getFriends: function getFriends() {
+        getUsers: function getUsers() {
             var _this2 = this;
 
-            axios.post('/getUsers').then(function (res) {
-                return _this2.users = res.data;
+            axios.get('/getUsers').then(function (res) {
+                return _this2.users = res.data.data;
             });
+        },
+        openChat: function openChat(user) {
+            this.users.forEach(function (user) {
+                user.session.open = false;
+            });
+            user.session.open = true;
         }
     }
 });
@@ -47392,14 +47409,25 @@ var render = function() {
             { staticClass: "list-group" },
             _vm._l(_vm.users, function(user) {
               return _c(
-                "li",
-                { key: user.id, staticClass: "list-group-item" },
+                "a",
+                {
+                  key: user.id,
+                  attrs: { href: "" },
+                  on: {
+                    click: function($event) {
+                      $event.preventDefault()
+                      _vm.openChat(user)
+                    }
+                  }
+                },
                 [
-                  _vm._v(
-                    "\n                        " +
-                      _vm._s(user.name) +
-                      "\n                    "
-                  )
+                  _c("li", { staticClass: "list-group-item" }, [
+                    _vm._v(
+                      "\n                            " +
+                        _vm._s(user.name) +
+                        "\n                        "
+                    )
+                  ])
                 ]
               )
             })
@@ -47410,12 +47438,25 @@ var render = function() {
       _c(
         "div",
         { staticClass: "col-md-9" },
-        [
-          _vm.open
-            ? _c("message-component", { on: { close: _vm.close } })
-            : _vm._e()
-        ],
-        1
+        _vm._l(_vm.users, function(user) {
+          return _c(
+            "span",
+            { key: user.id },
+            [
+              user.session.open
+                ? _c("message-component", {
+                    attrs: { user: user },
+                    on: {
+                      close: function($event) {
+                        _vm.close(user)
+                      }
+                    }
+                  })
+                : _vm._e()
+            ],
+            1
+          )
+        })
       )
     ])
   ])
@@ -47916,6 +47957,7 @@ Object.defineProperty(__webpack_exports__, "__esModule", { value: true });
 //
 
 /* harmony default export */ __webpack_exports__["default"] = ({
+    props: ['user'],
     data: function data() {
         return {
             messages: [],
@@ -47992,7 +48034,7 @@ var render = function() {
   return _c("div", { staticClass: "card card-default chat-box" }, [
     _c("div", { staticClass: "card-header" }, [
       _c("strong", { class: { "text-danger": _vm.block } }, [
-        _vm._v("\n            User Name\n            "),
+        _vm._v("\n            " + _vm._s(_vm.user.name) + "\n            "),
         _vm.block ? _c("span", [_vm._v("(Blocked)")]) : _vm._e()
       ]),
       _vm._v(" "),

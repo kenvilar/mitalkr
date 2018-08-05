@@ -2,7 +2,7 @@
     <div class="card card-default chat-box">
         <div class="card-header">
             <strong :class="{'text-danger': block}">
-                User Name
+                {{ user.name }}
                 <span v-if="block">(Blocked)</span>
             </strong>
             <a href="" @click.prevent="close">
@@ -35,6 +35,7 @@
 
 <script>
     export default {
+        props: ['user'],
         data() {
             return {
                 messages: [],

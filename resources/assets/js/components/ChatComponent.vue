@@ -6,17 +6,29 @@
                     <div class="card-header">Private Chat App</div>
 
                     <ul class="list-group">
-                        <li class="list-group-item"
-                            v-for="user in users"
-                            :key="user.id"
+                        <a href=""
+                           v-for="user in users"
+                           :key="user.id"
+                           @click.prevent="openChat(user)"
                         >
-                            {{ user.name }}
-                        </li>
+                            <li class="list-group-item">
+                                {{ user.name }}
+                            </li>
+                        </a>
                     </ul>
                 </div>
             </div>
             <div class="col-md-9">
-                <message-component v-if="open" @close="close"></message-component>
+                <span
+                        v-for="user in users"
+                        :key="user.id"
+                >
+                    <message-component
+                            v-if="user.session.open"
+                            @close="close(user)"
+                            :user="user"
+                    />
+                </span>
             </div>
         </div>
     </div>
@@ -26,25 +38,29 @@
     export default {
         data() {
             return {
-                open: true,
                 users: [],
             };
         },
         created() {
             this.$on('close', () => this.close());
-
+            this.getUsers();
         },
         mounted() {
             console.log('Component mounted.');
-            this.getFriends();
         },
         methods: {
-            close() {
-                this.open = false;
+            close(user) {
+                user.session.open = false;
             },
-            getFriends() {
-                axios.post('/getUsers').then((res) => this.users = res.data);
+            getUsers() {
+                axios.get('/getUsers').then((res) => this.users = res.data.data);
             },
+            openChat(user) {
+                this.users.forEach(user => {
+                    user.session.open = false;
+                });
+                user.session.open = true;
+            }
         }
     }
 </script>
